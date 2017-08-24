@@ -1,0 +1,25 @@
+/* base.less */
+
+.square(@size:200px){
+    width:@size;
+    height:@size;
+}
+.f40{
+    font-size: 40px;
+}
+.box1{
+    .square();
+}
+.box2{
+    .square(300px);
+}
+.base{
+    background-color: #fff;
+    .body{
+        font-size:30px;
+        background-color: #eee;
+        text-transform: '';
+        transition:all 0.3s;
+        background: url(../img/image.png) 0 0 no-repeat;
+    }
+}
