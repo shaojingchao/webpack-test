@@ -1,12 +1,64 @@
+
+
 require('./postcss.config.js')
 const path = require('path')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+
+require('html-minifier');
+
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    app:'./src/index.js',
+    print:'./src/print.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle-[hash].js',
     path: path.resolve(__dirname, 'dist')
   },
+  devServer:{
+    compress: true,
+    contentBase:'/dist',
+    proxy: {
+      "/api/v1/topic?(s)?(/**)": { //
+        target: "https://cnodejs.org",
+        secure: false
+      },
+      // "/api/v1/topic/**": {
+      //   target: "https://cnodejs.org",
+      //   secure: false
+      // }
+    }
+  },
+  devtool: 'inline-source-map',
+  plugins: [
+  new ManifestPlugin({
+    fileName: 'manifest1.json',
+    basePath: '/manifest1/',
+    publicPath:path.resolve(__dirname, '/'),
+    seed: {
+      name: '资源列表222'
+    }
+  }),
+    new CleanWebpackPlugin(['dist']),
+    new HtmlWebpackPlugin({
+      title:'output html-webpack-plugin',
+      filename:'index.html',
+      template:'./index.ejs',
+      // inject:'body',
+      favicon:'./src/img/logo.png',
+      minify:{
+      collapseWhitespace:true,
+      minifyJS:true,
+      minifyCSS:true
+      }
+    }),
+    new ExtractTextPlugin({
+      filename: 'styles-[hash].css'
+    }),
+  ],
   module: {
     rules: [
       // {
@@ -69,12 +121,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  plugins: [
-    new ExtractTextPlugin({
-      filename: function(name) {
-        return 'styles.css';
-      }
-    }),
-  ]
+  }
 };

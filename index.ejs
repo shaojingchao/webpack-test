@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+        .inline-style{
+            color:#fff;
+        }
+    </style>
+    <script>
+        alert('dsdaas')
+    </script>
+  </head>
+  <body>
+  <div>
+      <% for (var k in htmlWebpackPlugin.options){%>
+      <div><%= htmlWebpackPlugin.options[k]%></div>
+      <%}%>
+  </div>
+  <div><pre>
+      <%= JSON.stringify(htmlWebpackPlugin.options,null,4)%>
+  </pre></div>
+  <div class="html-demo"></div>
+  </body>
+</html>
